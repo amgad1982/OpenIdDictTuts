@@ -1,3 +1,4 @@
+using AuthorizationServer;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
@@ -52,8 +53,10 @@ builder.Services.AddOpenIddict()
         });
 
 
-
+builder.Services.AddSingleton(typeof(SeedAuthServerData));
 var app = builder.Build();
+
+
 
 if (app.Environment.IsDevelopment())
 {
@@ -73,4 +76,6 @@ app.UseEndpoints(endpoints =>
 
 app.MapGet("/hello", () => "Hello World!");
 
+await app.Services.GetRequiredService<SeedAuthServerData>()
+    .Seed();
 app.Run();
