@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -9,6 +10,26 @@ namespace AuthorizationServer.Controllers
 {
     public class AccountController : Controller
     {
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly ILogger<AccountController> _logger;
+        public AccountController(ILogger<AccountController> logger,UserManager<IdentityUser> userManager)
+        {
+            _logger = logger;
+            _userManager = userManager;
+        }
+        public async Task<IActionResult> Register(RegistrationViewModel registrationViewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                var user = new IdentityUser { UserName = registrationViewModel.Email, Email = registrationViewModel.Email };
+                var result = await _userManager.CreateAsync(user, registrationViewModel.Password);
+                if (result.Succeeded)
+                {
+
+                }
+            }
+        }
+
         [HttpGet]
         [AllowAnonymous]
         public IActionResult Login(string returnUrl = null)
