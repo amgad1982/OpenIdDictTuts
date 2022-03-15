@@ -6,15 +6,15 @@ namespace AuthorizationServer
     public class SeedAuthServerData
     {
         private readonly IServiceProvider _serviceProvider;
-      
+
 
         public SeedAuthServerData(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
-       
+
         }
 
-        public async ValueTask Seed(CancellationToken cancellationToken=default)
+        public async ValueTask Seed(CancellationToken cancellationToken = default)
         {
             using var scope = _serviceProvider.CreateScope();
 
@@ -30,12 +30,19 @@ namespace AuthorizationServer
                     ClientId = "postman",
                     ClientSecret = "postman-secret",
                     DisplayName = "Postman",
+                    RedirectUris = { new Uri("https://oauth.pstmn.io/v1/callback") },
                     Permissions =
                     {
+                        OpenIddictConstants.Permissions.Endpoints.Authorization,
                         OpenIddictConstants.Permissions.Endpoints.Token,
-                        OpenIddictConstants.Permissions.GrantTypes.ClientCredentials,
 
-                        OpenIddictConstants.Permissions.Prefixes.Scope + "api"
+                        OpenIddictConstants.Permissions.GrantTypes.AuthorizationCode,
+                        OpenIddictConstants.Permissions.GrantTypes.ClientCredentials,
+                        OpenIddictConstants.Permissions.GrantTypes.RefreshToken,
+
+                        OpenIddictConstants.Permissions.Prefixes.Scope + "api",
+
+                        OpenIddictConstants.Permissions.ResponseTypes.Code
                     }
                 }, cancellationToken);
             }
