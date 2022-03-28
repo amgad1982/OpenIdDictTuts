@@ -28,6 +28,7 @@ namespace AuthorizationServer.Controllers
 
                 }
             }
+            return null;
         }
 
         [HttpGet]
